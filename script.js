@@ -4,7 +4,8 @@ const proximityLevel = document.getElementById('proximityLevel');
 const displaySize = {width: video.width, height: video.height};
 
 
-const minProportion = 0.06;
+// const minProportion = 0.06;
+const minProportion = 0.01;
 const maxProportion = 0.2;
 const levels = createProximityLevels(minProportion, maxProportion);
 
