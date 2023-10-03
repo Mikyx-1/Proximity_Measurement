@@ -27,7 +27,7 @@ function returnProximityLevel(areaProportion, levels){
 
     for (let i = 0; i < levels.length-1; i++)
     {
-        if(areaProportion>=levels[i] && areaProportion<=levels[i+1]) return levels.length+1 - (i+2);
+        if(areaProportion>=levels[i] && areaProportion<=levels[i+1]) return levels.length + 1 - (i+2);
     }
 }
 
@@ -48,6 +48,9 @@ navigator.mediaDevices.getUserMedia({video: true}).then(stream => {
     console.log("An error has occurred: ", error);
 })
 
+let areaProportion_prev = 0;
+let beta = 0.95;
+
 loadFaceAPI().then(async () => {
     video.addEventListener('play', async () => {    
 
@@ -60,10 +63,10 @@ loadFaceAPI().then(async () => {
                 let width = resizedDetects.box.width;
                 let height = resizedDetects.box.height;
     
-                let areaProportion = (width*height)/(displaySize.height*displaySize.width);
-                proximityLevel.innerText = 'Proximity Level: ' + returnProximityLevel(areaProportion, levels).toString() + ' Area Proportion: ' + areaProportion.toString();
+                let areaProportion = beta*areaProportion_prev + (1-beta)*(width*height)/(displaySize.height*displaySize.width)
+                areaProportion_prev = areaProportion;
 
-                
+                proximityLevel.innerText = 'Proximity Level: ' + returnProximityLevel(areaProportion, levels).toString() + ' Area Proportion: ' + areaProportion.toString();
             }
         }, 1000);
     })
